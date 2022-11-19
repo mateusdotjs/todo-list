@@ -2,7 +2,7 @@
 class Todo {
     constructor(text) {
         this.text = text,
-        this.done = false
+            this.done = false
     }
 }
 
@@ -21,7 +21,7 @@ function listAll() {
         //operações ternárias que retornam texto riscado e checkbox assinalado
         let p = list[i].done == true ? `<p id="text"><s>${list[i].text}</s></p>` : `<p id="text">${list[i].text}</p>`
         let input = list[i].done == true ? `<input type="checkbox" id="checkbox" onclick="check(${i})" checked>` : `<input type="checkbox" id="checkbox" onclick="check(${i}, this)"></input>`
-        taskList.innerHTML += `<div class="to-do" id="div${i}"> 
+        taskList.innerHTML += `<div class="to-do"> 
                                 ${input}
                                 ${p}
                                 <img src="img/edit.svg" style="width:30px;height:30px" class="icon" onclick="openModal(${i})"></img>
@@ -56,12 +56,18 @@ function openModal(index) {
         let btnEdit = document.querySelector('#edit')
         let btnExit = document.querySelector('#exit')
         if (e.target == btnEdit) {
+
             let inputEdit = document.querySelector('#inputEdit')
-            list[index].text = inputEdit.value
-            inputEdit.value = ''
-            modal.style.display = 'none'
-            localStorage.database = JSON.stringify(list)
-            listAll()
+            if (inputEdit.value != '') {
+                list[index].text = inputEdit.value
+                inputEdit.value = ''
+                modal.style.display = 'none'
+                localStorage.database = JSON.stringify(list)
+                listAll()
+            } else {
+                alert('preencha o campo')
+            }
+
         } else if (e.target == btnExit) {
             inputEdit.value = ''
             modal.style.display = 'none'
@@ -69,12 +75,10 @@ function openModal(index) {
     }
 }
 
-
 function closeModal() {
     let modal = document.querySelector('.modal-bg')
     modal.style.display = 'none'
 }
-
 
 function check(index) {
     if (list[index].done == false) {
